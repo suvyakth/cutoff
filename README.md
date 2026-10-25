@@ -4,6 +4,15 @@ A control room for Bahn operations. It shows only the orders that need a person,
 
 Named for the ferry check-in cut-off, the one deadline in the data that is truly hard. Built for the Bahn challenge, "The Car Delivery Control Room" (Prompt Operations Hackathon, Helsinki, 24-25 Oct 2026). All data is Bahn's fictional packet.
 
+## Try it in 60 seconds (no key needed)
+
+```bash
+git clone https://github.com/suvyakth/cutoff && cd cutoff
+python -m hq.server        # then open http://localhost:8750  (Python 3.10+, no installs)
+```
+
+Everything works without any key: the queue, the three recorded agent runs, approvals, the voice orb (browser voice), and the eval. **Two optional things need your own key**, because none is shipped: the **live agent** ("Run live") and **studio voice generation**. Copy `.env.example` to `.env`, paste your own [Groq](https://console.groq.com) key after `HQ_OPENAI_KEY=`, restart the server. `.env` is git-ignored. Without a key, "Run live" is disabled and says why.
+
 ## The idea in four lines
 
 1. Every deadline is **typed by how strongly the data states it**: customer promise, carrier cut-off on a *booked* ferry, planned slot, cut-off on an *unbooked quote*, soft reminder. The queue sorts by tier first. Time is only compared inside a tier. A work-item reminder is never promoted to a point of no return.
