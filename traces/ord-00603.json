@@ -1,0 +1,453 @@
+{
+ "id": "ord-00603",
+ "order_id": "ord-00603",
+ "mode": "recorded",
+ "model": "claude-haiku driving the tool loop via manual transport (Claude Code subagent)",
+ "status": "done",
+ "now": "2026-10-21T09:00:00Z",
+ "calls": 7,
+ "max_calls": 8,
+ "steps": [
+  {
+   "kind": "TOOL",
+   "tool": "get_order",
+   "args": {
+    "order_id": "ord-00603"
+   },
+   "why": "Start with the order itself: status, route, windows, deadlines and endpoint details.",
+   "result": {
+    "id": "ord-00603",
+    "reference": "CD-420603",
+    "status": "IN_TRANSIT",
+    "route_kind": "IMPORT",
+    "vehicles": [
+     {
+      "id": "veh-00603",
+      "make": "Volkswagen",
+      "model": "Golf"
+     }
+    ],
+    "selected_windows": [
+     {
+      "id": "win-x32f08790f92ed287",
+      "purpose": "SELECTED_PICKUP_SLOT",
+      "start_at": "2026-10-20T14:00:00Z",
+      "end_at": "2026-10-20T15:00:00Z",
+      "timezone": "Europe/Berlin",
+      "selected": true,
+      "commitment_deadline_at": null
+     },
+     {
+      "id": "win-xd8ea7b8e35089ee5",
+      "purpose": "CUSTOMER_DELIVERY_PROMISE",
+      "start_at": "2026-10-23T10:00:00Z",
+      "end_at": "2026-10-23T12:00:00Z",
+      "timezone": "Europe/Helsinki",
+      "selected": true,
+      "commitment_deadline_at": null
+     }
+    ],
+    "endpoints": [
+     {
+      "id": "ep-x5e8c6222c01643cd",
+      "boundary": "PICKUP",
+      "contact_status": "UNCONFIRMED",
+      "access_status": "NEEDS_VERIFICATION",
+      "instruction": "Arrange a named seller handover at the door; no unattended key collection is agreed."
+     },
+     {
+      "id": "ep-x1e15471c2568a009",
+      "boundary": "DELIVERY",
+      "contact_status": "UNCONFIRMED",
+      "access_status": "NEEDS_VERIFICATION",
+      "instruction": "A named receiver must accept the car and keys; there is no agreed unattended drop."
+     }
+    ]
+   },
+   "cost": "lookup, no approval needed",
+   "n": 1
+  },
+  {
+   "kind": "TOOL",
+   "tool": "get_messages",
+   "args": {
+    "order_id": "ord-00603"
+   },
+   "why": "Read every message on the order to see what the customer, ops and the driver have said.",
+   "result": {
+    "messages": [
+     {
+      "id": "msg-xf06d346a050b3e0a",
+      "at": "2026-10-21T06:58:00Z",
+      "from": "driver:drv-121",
+      "channel": "support_chat",
+      "visibility": "PUBLIC",
+      "body": "The queue before the terminal has barely moved. The booked crossing for CD-420603 may close before I reach check-in."
+     },
+     {
+      "id": "msg-x6facdfad04774a58",
+      "at": "2026-10-21T07:10:00Z",
+      "from": "operator:ops-support",
+      "channel": "support_chat",
+      "visibility": "PUBLIC",
+      "body": "I am checking the check-in deadline and next available sailing. Please send your latest ETA when it updates."
+     },
+     {
+      "id": "msg-x108ad4ae10c6ef5e",
+      "at": "2026-10-21T07:14:00Z",
+      "from": "operator:ops-support",
+      "channel": "internal_note",
+      "visibility": "INTERNAL",
+      "body": "Do not cancel the current booking or promise another crossing until capacity and fare terms are confirmed."
+     },
+     {
+      "id": "msg-x9d7829f6508ab7c0",
+      "at": "2026-10-21T07:31:00Z",
+      "from": "driver:drv-121",
+      "channel": "support_chat",
+      "visibility": "PUBLIC",
+      "body": "I am still in the queue with the car. I have not turned toward another terminal."
+     },
+     {
+      "id": "msg-x7074c5c677e14192",
+      "at": "2026-10-21T08:43:00Z",
+      "from": "operator:ops-travel",
+      "channel": "internal_note",
+      "visibility": "INTERNAL",
+      "body": "Carrier desk took our request to move this car to a later crossing, but has not confirmed a slot or fare. Keep the original booking active. Do not tell the driver to turn away or change the customer's delivery promise yet."
+     }
+    ]
+   },
+   "cost": "lookup, no approval needed",
+   "n": 2
+  },
+  {
+   "kind": "TOOL",
+   "tool": "get_travel",
+   "args": {
+    "order_id": "ord-00603"
+   },
+   "why": "Check the ferry options and reservations, their status, quotes, cut-offs and checked_at times.",
+   "result": {
+    "options": [],
+    "reservations": [
+     {
+      "id": "res-x1082202e8d139d61",
+      "kind": "FERRY",
+      "status": "BOOKED",
+      "booking_reference": "WBV-FERRY-00603",
+      "departure_at": "2026-10-21T14:00:00Z",
+      "check_in_cutoff_at": "2026-10-21T12:00:00Z",
+      "check_in_confirmation": "UNCONFIRMED",
+      "boarding_confirmation": "UNCONFIRMED",
+      "expected_arrival_at": "2026-10-22T20:00:00Z"
+     }
+    ],
+    "note": "A quote (AVAILABLE_QUOTE) is not a booking. A reservation with UNCONFIRMED check-in is not proof of boarding."
+   },
+   "cost": "lookup, no approval needed",
+   "n": 3
+  },
+  {
+   "kind": "TOOL",
+   "tool": "get_assignment",
+   "args": {
+    "order_id": "ord-00603"
+   },
+   "why": "Confirm the assigned driver, the assignment steps and the fee before judging timing.",
+   "result": {
+    "assignments": [
+     {
+      "id": "asg-x3bfd2d7c41a7a3d5",
+      "driver_id": "drv-121",
+      "driver_home_city": "Helsinki",
+      "status": "IN_PROGRESS",
+      "fee_cents": 169500,
+      "currency": "EUR"
+     }
+    ],
+    "steps": [
+     {
+      "id": "step-x66a1f843fafae399",
+      "kind": "VEHICLE_PICKUP",
+      "title": "Collect Volkswagen Golf at Private handoff, Munich",
+      "status": "COMPLETED",
+      "scheduled_start_at": "2026-10-20T14:00:00Z",
+      "scheduled_end_at": "2026-10-20T15:00:00Z"
+     },
+     {
+      "id": "step-x24c3ddd1e53cb20f",
+      "kind": "VEHICLE_FERRY",
+      "title": "Vehicle crossing from West Baltic Vehicle Terminal toward South Finland Vehicle Terminal",
+      "status": "PLANNED",
+      "scheduled_start_at": "2026-10-21T14:00:00Z",
+      "scheduled_end_at": "2026-10-22T20:00:00Z"
+     },
+     {
+      "id": "step-x7e73417dcbd40a74",
+      "kind": "VEHICLE_DELIVERY",
+      "title": "Hand over Volkswagen Golf at Private handoff, Lahti",
+      "status": "PLANNED",
+      "scheduled_start_at": "2026-10-23T10:00:00Z",
+      "scheduled_end_at": "2026-10-23T12:00:00Z"
+     }
+    ]
+   },
+   "cost": "lookup, no approval needed",
+   "n": 4
+  },
+  {
+   "kind": "TOOL",
+   "tool": "verify_booking_outcome",
+   "args": {
+    "order_id": "ord-00603"
+   },
+   "why": "Reconcile whether earlier booking attempts left a real reservation or confirmation before relying on the booked crossing.",
+   "result": {
+    "attempts": [],
+    "reservation_ids": [
+     "res-x1082202e8d139d61"
+    ],
+    "verdict": "No failed booking attempt on record."
+   },
+   "cost": "lookup, no approval needed",
+   "n": 5
+  },
+  {
+   "kind": "TOOL",
+   "tool": "check_timing",
+   "args": {
+    "order_id": "ord-00603",
+    "travel_option_id": "res-x1082202e8d139d61"
+   },
+   "why": "Compute whether the driver can reach the terminal before the check-in cut-off and whether the delivery window stays reachable, using the booked reservation.",
+   "result": {
+    "reservation_id": "res-x1082202e8d139d61",
+    "status": "BOOKED",
+    "check_in_cutoff_at": "2026-10-21T12:00:00Z",
+    "check_in_confirmation": "UNCONFIRMED",
+    "boarding_confirmation": "UNCONFIRMED",
+    "minutes_to_check_in_cutoff_at_sim_clock": 180,
+    "latest_tracking": {
+     "id": "track-x3fe486c5847cfc53",
+     "observed_at": "2026-10-21T08:06:00Z",
+     "location_quality": "COARSE",
+     "distance_remaining_km": 1772
+    },
+    "cannot_compute": "Whether the driver reaches the terminal before the cut-off. The packet has no live position or terminal ETA, and its road estimates cannot be applied to tracking progress. A person must ask the driver or the carrier.",
+    "basis": "check_in_cutoff_at of the booked reservation vs the simulated clock."
+   },
+   "cost": "lookup, no approval needed",
+   "n": 6
+  },
+  {
+   "kind": "TOOL",
+   "tool": "message_driver",
+   "args": {
+    "order_id": "ord-00603",
+    "text": "Please reply with your current position in the queue before the terminal, your estimated time of arrival at check-in for the booked crossing WBV-FERRY-00603, and whether the queue is still moving."
+   },
+   "why": "The packet cannot tell whether the driver reaches check-in before the 12:00Z cut-off, so ask the driver for the one missing fact: a current terminal ETA.",
+   "result": {
+    "driver_id": "drv-121",
+    "simulated": true,
+    "recognised": false,
+    "reply": null,
+    "note": "UNRECOGNISED: the scripted driver has no answer to this. Stop and hand over to a person."
+   },
+   "cost": "lookup, no approval needed",
+   "n": 7
+  },
+  {
+   "kind": "FINAL",
+   "text": "Ferry WBV-FERRY-00603 is BOOKED but its 2026-10-21 12:00Z check-in cut-off may be missed; no live terminal ETA exists, so a person must confirm",
+   "grounding": "11 of 11 claims grounded, 0 dropped",
+   "n": 8
+  }
+ ],
+ "final": {
+  "headline": "Ferry WBV-FERRY-00603 is BOOKED but its 2026-10-21 12:00Z check-in cut-off may be missed; no live terminal ETA exists, so a person must confirm",
+  "stop_reason": "The data cannot tell whether driver drv-121 reaches check-in before 2026-10-21T12:00Z: there is no live position or terminal ETA, the last tracking is coarse, and the simulated driver did not recognise the ETA question. The carrier move to a later crossing is requested but its slot and fare are unconfirmed. Stopping here to hand over.",
+  "known": [
+   {
+    "fact": "Ferry reservation is BOOKED, booking reference WBV-FERRY-00603, departs 2026-10-21T14:00Z, check-in cut-off 2026-10-21T12:00Z; check-in and boarding confirmation are both UNCONFIRMED",
+    "source_ids": [
+     "res-x1082202e8d139d61"
+    ],
+    "strength": "BOOKED_UNCONFIRMED"
+   },
+   {
+    "fact": "At the simulated clock the check-in cut-off is 180 minutes away",
+    "source_ids": [
+     "res-x1082202e8d139d61"
+    ],
+    "strength": "BOOKED_UNCONFIRMED"
+   },
+   {
+    "fact": "Driver reported at 06:58Z that the queue before the terminal has barely moved and the booked crossing may close before check-in",
+    "source_ids": [
+     "msg-xf06d346a050b3e0a"
+    ],
+    "strength": "REPORTED_UNVERIFIED"
+   },
+   {
+    "fact": "Driver reported at 07:31Z still in the queue with the car and has not turned toward another terminal",
+    "source_ids": [
+     "msg-x9d7829f6508ab7c0"
+    ],
+    "strength": "REPORTED_UNVERIFIED"
+   },
+   {
+    "fact": "Latest tracking was observed at 2026-10-21T08:06Z, location quality COARSE, 1772 km remaining; there is no live position or terminal ETA, so arrival before cut-off cannot be computed",
+    "source_ids": [
+     "track-x3fe486c5847cfc53",
+     "res-x1082202e8d139d61"
+    ],
+    "strength": "BOOKED_UNCONFIRMED"
+   },
+   {
+    "fact": "Carrier desk has taken a request to move the car to a later crossing, but has not confirmed a slot or fare; internal ops note says keep the original booking active and do not change the driver instruction or customer promise yet",
+    "source_ids": [
+     "msg-x7074c5c677e14192"
+    ],
+    "strength": "REPORTED_UNVERIFIED"
+   },
+   {
+    "fact": "Earlier internal note: do not cancel the current booking or promise another crossing until capacity and fare terms are confirmed",
+    "source_ids": [
+     "msg-x108ad4ae10c6ef5e"
+    ],
+    "strength": "REPORTED_UNVERIFIED"
+   },
+   {
+    "fact": "No failed booking attempt is on record; the only reservation is the BOOKED ferry",
+    "source_ids": [
+     "res-x1082202e8d139d61"
+    ],
+    "strength": "BOOKED_UNCONFIRMED"
+   },
+   {
+    "fact": "Ferry expected arrival is 2026-10-22T20:00Z; the delivery step is planned for 2026-10-23 between 10:00Z and 12:00Z at Lahti",
+    "source_ids": [
+     "res-x1082202e8d139d61",
+     "step-x7e73417dcbd40a74",
+     "win-xd8ea7b8e35089ee5"
+    ],
+    "strength": "BOOKED_UNCONFIRMED"
+   },
+   {
+    "fact": "Assignment asg-x3bfd2d7c41a7a3d5 is IN_PROGRESS with driver drv-121; the pickup step is COMPLETED",
+    "source_ids": [
+     "asg-x3bfd2d7c41a7a3d5",
+     "step-x66a1f843fafae399"
+    ],
+    "strength": "RECORDED"
+   },
+   {
+    "fact": "Pickup and delivery endpoints are contact UNCONFIRMED and access NEEDS_VERIFICATION; delivery requires a named receiver",
+    "source_ids": [
+     "ep-x5e8c6222c01643cd",
+     "ep-x1e15471c2568a009"
+    ],
+    "strength": "RECORDED"
+   }
+  ],
+  "options": [
+   {
+    "id": "A",
+    "title": "Keep the booked crossing and get a live terminal ETA before the cut-off",
+    "cost_eur": null,
+    "eta": "Check-in cut-off 2026-10-21T12:00Z; departure 14:00Z; expected arrival 2026-10-22T20:00Z",
+    "downside": "If the driver cannot reach check-in before 12:00Z, the booked crossing is lost and no later crossing is confirmed yet",
+    "steps": [
+     {
+      "action": "hold_and_verify",
+      "detail": "Keep WBV-FERRY-00603 active, do not cancel it, and ask the carrier for the check-in status of res-x1082202e8d139d61",
+      "reversible": true,
+      "cost_eur": null,
+      "label": "Hold and verify",
+      "needs_approval": false,
+      "human_only": false,
+      "id": "A1"
+     },
+     {
+      "action": "message_driver",
+      "detail": "A person asks driver drv-121 for a current terminal ETA and queue position; the simulated driver did not recognise a free-form ETA question, so a person may need to call the driver",
+      "reversible": true,
+      "cost_eur": null,
+      "label": "Message the driver",
+      "needs_approval": false,
+      "human_only": false,
+      "id": "A2"
+     }
+    ],
+    "compensation": "If the cut-off is missed, nothing is cancelled automatically; a person then decides on the later crossing (option B) and on the delivery promise"
+   },
+   {
+    "id": "B",
+    "title": "Pursue the carrier's later crossing once its slot and fare are confirmed",
+    "cost_eur": null,
+    "eta": "Unknown; no later crossing is confirmed",
+    "downside": "The carrier has not confirmed a slot or fare, so a later crossing may not be available and the delivery window may move",
+    "steps": [
+     {
+      "action": "hold_and_verify",
+      "detail": "Get the carrier desk to confirm slot and fare for the later crossing in writing; keep the original booking active until a replacement is confirmed",
+      "reversible": true,
+      "cost_eur": null,
+      "label": "Hold and verify",
+      "needs_approval": false,
+      "human_only": false,
+      "id": "B1"
+     },
+     {
+      "action": "ask_customer_approval",
+      "detail": "A person asks the customer whether a later crossing and a changed delivery promise are acceptable; this agent does not contact the customer",
+      "reversible": true,
+      "cost_eur": null,
+      "label": "Ask the customer to approve (a person does this)",
+      "needs_approval": true,
+      "human_only": true,
+      "id": "B2"
+     },
+     {
+      "action": "book_ferry",
+      "detail": "Only after confirmation: book the later crossing; this is not reversible and needs a person's approval",
+      "reversible": false,
+      "cost_eur": null,
+      "label": "Book the ferry",
+      "needs_approval": true,
+      "human_only": false,
+      "id": "B3"
+     }
+    ],
+    "compensation": "Original booking WBV-FERRY-00603 stays active until the replacement is confirmed; if the replacement fails, the original remains"
+   }
+  ],
+  "recommended": "A",
+  "decision": "Keep the booked crossing active while a person gets a live terminal ETA, or pursue the carrier's later crossing once its slot and fare are confirmed?",
+  "needs_from_human": [
+   "A live terminal ETA from driver drv-121, or carrier confirmation of check-in status for WBV-FERRY-00603",
+   "Carrier desk confirmation of a later crossing's slot and fare, which is not yet confirmed",
+   "Whether the customer delivery promise changes; a person, not this agent, contacts the customer"
+  ]
+ },
+ "grounding": {
+  "claims": 11,
+  "kept": 11,
+  "dropped": [],
+  "reordered_options": 0
+ },
+ "stop_reason": "The data cannot tell whether driver drv-121 reaches check-in before 2026-10-21T12:00Z: there is no live position or terminal ETA, the last tracking is coarse, and the simulated driver did not recognise the ETA question. The carrier move to a later crossing is requested but its slot and fare are unconfirmed. Stopping here to hand over.",
+ "error": null,
+ "model_outputs": [
+  "{\"tool\": \"get_order\", \"args\": {\"order_id\": \"ord-00603\"}, \"why\": \"Start with the order itself: status, route, windows, deadlines and endpoint details.\"}",
+  "{\"tool\": \"get_messages\", \"args\": {\"order_id\": \"ord-00603\"}, \"why\": \"Read every message on the order to see what the customer, ops and the driver have said.\"}",
+  "{\"tool\": \"get_travel\", \"args\": {\"order_id\": \"ord-00603\"}, \"why\": \"Check the ferry options and reservations, their status, quotes, cut-offs and checked_at times.\"}",
+  "{\"tool\": \"get_assignment\", \"args\": {\"order_id\": \"ord-00603\"}, \"why\": \"Confirm the assigned driver, the assignment steps and the fee before judging timing.\"}",
+  "{\"tool\": \"verify_booking_outcome\", \"args\": {\"order_id\": \"ord-00603\"}, \"why\": \"Reconcile whether earlier booking attempts left a real reservation or confirmation before relying on the booked crossing.\"}",
+  "{\"tool\": \"check_timing\", \"args\": {\"order_id\": \"ord-00603\", \"travel_option_id\": \"res-x1082202e8d139d61\"}, \"why\": \"Compute whether the driver can reach the terminal before the check-in cut-off and whether the delivery window stays reachable, using the booked reservation.\"}",
+  "{\"tool\": \"message_driver\", \"args\": {\"order_id\": \"ord-00603\", \"text\": \"Please reply with your current position in the queue before the terminal, your estimated time of arrival at check-in for the booked crossing WBV-FERRY-00603, and whether the queue is still moving.\"}, \"why\": \"The packet cannot tell whether the driver reaches check-in before the 12:00Z cut-off, so ask the driver for the one missing fact: a current terminal ETA.\"}",
+  "{\"final\": {\n  \"headline\": \"Ferry WBV-FERRY-00603 is BOOKED but its 2026-10-21 12:00Z check-in cut-off may be missed; no live terminal ETA exists, so a person must confirm\",\n  \"stop_reason\": \"The data cannot tell whether driver drv-121 reaches check-in before 2026-10-21T12:00Z: there is no live position or terminal ETA, the last tracking is coarse, and the simulated driver did not recognise the ETA question. The carrier move to a later crossing is requested but its slot and fare are unconfirmed. Stopping here to hand over.\",\n  \"known\": [\n    {\"fact\": \"Ferry reservation is BOOKED, booking reference WBV-FERRY-00603, departs 2026-10-21T14:00Z, check-in cut-off 2026-10-21T12:00Z; check-in and boarding confirmation are both UNCONFIRMED\", \"source_ids\": [\"res-x1082202e8d139d61\"]},\n    {\"fact\": \"At the simulated clock the check-in cut-off is 180 minutes away\", \"source_ids\": [\"res-x1082202e8d139d61\"]},\n    {\"fact\": \"Driver reported at 06:58Z that the queue before the terminal has barely moved and the booked crossing may close before check-in\", \"source_ids\": [\"msg-xf06d346a050b3e0a\"]},\n    {\"fact\": \"Driver reported at 07:31Z still in the queue with the car and has not turned toward another terminal\", \"source_ids\": [\"msg-x9d7829f6508ab7c0\"]},\n    {\"fact\": \"Latest tracking was observed at 2026-10-21T08:06Z, location quality COARSE, 1772 km remaining; there is no live position or terminal ETA, so arrival before cut-off cannot be computed\", \"source_ids\": [\"track-x3fe486c5847cfc53\", \"res-x1082202e8d139d61\"]},\n    {\"fact\": \"Carrier desk has taken a request to move the car to a later crossing, but has not confirmed a slot or fare; internal ops note says keep the original booking active and do not change the driver instruction or customer promise yet\", \"source_ids\": [\"msg-x7074c5c677e14192\"]},\n    {\"fact\": \"Earlier internal note: do not cancel the current booking or promise another crossing until capacity and fare terms are confirmed\", \"source_ids\": [\"msg-x108ad4ae10c6ef5e\"]},\n    {\"fact\": \"No failed booking attempt is on record; the only reservation is the BOOKED ferry\", \"source_ids\": [\"res-x1082202e8d139d61\"]},\n    {\"fact\": \"Ferry expected arrival is 2026-10-22T20:00Z; the delivery step is planned for 2026-10-23 between 10:00Z and 12:00Z at Lahti\", \"source_ids\": [\"res-x1082202e8d139d61\", \"step-x7e73417dcbd40a74\", \"win-xd8ea7b8e35089ee5\"]},\n    {\"fact\": \"Assignment asg-x3bfd2d7c41a7a3d5 is IN_PROGRESS with driver drv-121; the pickup step is COMPLETED\", \"source_ids\": [\"asg-x3bfd2d7c41a7a3d5\", \"step-x66a1f843fafae399\"]},\n    {\"fact\": \"Pickup and delivery endpoints are contact UNCONFIRMED and access NEEDS_VERIFICATION; delivery requires a named receiver\", \"source_ids\": [\"ep-x5e8c6222c01643cd\", \"ep-x1e15471c2568a009\"]}\n  ],\n  \"options\": [\n    {\"id\": \"A\", \"title\": \"Keep the booked crossing and get a live terminal ETA before the cut-off\", \"cost_eur\": null, \"eta\": \"Check-in cut-off 2026-10-21T12:00Z; departure 14:00Z; expected arrival 2026-10-22T20:00Z\", \"downside\": \"If the driver cannot reach check-in before 12:00Z, the booked crossing is lost and no later crossing is confirmed yet\", \"steps\": [\n      {\"action\": \"hold_and_verify\", \"detail\": \"Keep WBV-FERRY-00603 active, do not cancel it, and ask the carrier for the check-in status of res-x1082202e8d139d61\", \"reversible\": true, \"cost_eur\": null},\n      {\"action\": \"message_driver\", \"detail\": \"A person asks driver drv-121 for a current terminal ETA and queue position; the simulated driver did not recognise a free-form ETA question, so a person may need to call the driver\", \"reversible\": true, \"cost_eur\": null}\n    ], \"compensation\": \"If the cut-off is missed, nothing is cancelled automatically; a person then decides on the later crossing (option B) and on the delivery promise\"},\n    {\"id\": \"B\", \"title\": \"Pursue the carrier's later crossing once its slot and fare are confirmed\", \"cost_eur\": null, \"eta\": \"Unknown; no later crossing is confirmed\", \"downside\": \"The carrier has not confirmed a slot or fare, so a later crossing may not be available and the delivery window may move\", \"steps\": [\n      {\"action\": \"hold_and_verify\", \"detail\": \"Get the carrier desk to confirm slot and fare for the later crossing in writing; keep the original booking active until a replacement is confirmed\", \"reversible\": true, \"cost_eur\": null},\n      {\"action\": \"ask_customer_approval\", \"detail\": \"A person asks the customer whether a later crossing and a changed delivery promise are acceptable; this agent does not contact the customer\", \"reversible\": true, \"cost_eur\": null},\n      {\"action\": \"book_ferry\", \"detail\": \"Only after confirmation: book the later crossing; this is not reversible and needs a person's approval\", \"reversible\": false, \"cost_eur\": null}\n    ], \"compensation\": \"Original booking WBV-FERRY-00603 stays active until the replacement is confirmed; if the replacement fails, the original remains\"}\n  ],\n  \"recommended\": \"A\",\n  \"decision\": \"Keep the booked crossing active while a person gets a live terminal ETA, or pursue the carrier's later crossing once its slot and fare are confirmed?\",\n  \"needs_from_human\": [\n    \"A live terminal ETA from driver drv-121, or carrier confirmation of check-in status for WBV-FERRY-00603\",\n    \"Carrier desk confirmation of a later crossing's slot and fare, which is not yet confirmed\",\n    \"Whether the customer delivery promise changes; a person, not this agent, contacts the customer\"\n  ]\n}}"
+ ]
+}

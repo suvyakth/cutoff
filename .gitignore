@@ -1,0 +1,6 @@
+state/
+scratch/
+sessions/
+__pycache__/
+*.pyc
+.env

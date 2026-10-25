@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-size="m" data-density="comfortable">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cutoff</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#hero"><span class="mark" aria-hidden="true"></span>Cutoff</a>
+  <nav>
+    <a href="#hero">Brief me</a>
+    <a href="#work">The queue</a>
+    <a href="#left">Left alone</a>
+    <a href="#proof">Proof</a>
+  </nav>
+  <button class="gear" id="gear" aria-expanded="false" aria-controls="settings">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="2.2" fill="currentColor"/><circle cx="15" cy="12" r="2.2" fill="currentColor"/><circle cx="8" cy="18" r="2.2" fill="currentColor"/></svg>
+    Settings
+  </button>
+</header>
+
+<div id="settings" hidden role="dialog" aria-label="Preferences">
+  <h3>Preferences <button class="linkbtn" id="reset">Reset</button></h3>
+  <div class="set"><label class="t">Theme</label><div class="seg" data-key="theme"><button data-v="auto">Auto</button><button data-v="light">Light</button><button data-v="dark">Dark</button></div></div>
+  <div class="set"><label class="t">Text size</label><div class="seg" data-key="size"><button data-v="s">Small</button><button data-v="m">Medium</button><button data-v="l">Large</button></div></div>
+  <div class="set"><label class="t">Density</label><div class="seg" data-key="density"><button data-v="comfortable">Comfortable</button><button data-v="compact">Compact</button></div></div>
+  <div class="set"><label class="t">Car images</label><div class="seg" data-key="images"><button data-v="on">Show</button><button data-v="off">Hide</button></div></div>
+  <div class="set"><label class="t">Motion</label><div class="seg" data-key="motion"><button data-v="full">Normal</button><button data-v="reduce">Reduced</button></div></div>
+  <div class="set"><label class="t">Voice</label><div class="seg" data-key="engine" style="margin-bottom:.5rem"><button data-v="studio">Studio voice</button><button data-v="browser">Browser voice</button></div><div class="seg" data-key="voice"><button data-v="on">Speak</button><button data-v="off">Captions only</button></div>
+    <select id="voicepick" style="margin-top:.5rem" aria-label="Voice"></select><small>Studio voice plays recorded clips, or generates them if a key is set. The browser voices below are the fallback.</small></div>
+</div>
+
+<section id="hero"></section>
+<section id="diff"></section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="work-head">
+      <h2>The queue</h2>
+      <div class="later"><span>What if it were later?</span>
+        <div id="later" role="group" aria-label="Simulated time">
+          <button data-h="0" class="on">Now</button><button data-h="6">+6 h</button><button data-h="24">+1 day</button><button data-h="48">+2 days</button><button data-h="72">+3 days</button>
+        </div>
+      </div>
+    </div>
+    <div id="summary"></div>
+    <div class="cols">
+      <aside id="list" aria-label="Orders that need you"></aside>
+      <section id="detail"><div class="empty"><h3>Pick an order</h3><p>Open any card. You will see why it needs you, what is known, and the decision.</p></div></section>
+    </div>
+  </div>
+</section>
+
+<section id="proof"><div class="wrap" id="proofbody"></div></section>
+
+<div id="dock" data-mode="idle" role="region" aria-label="Voice assistant">
+  <button id="orbbtn" class="orbwrap" aria-label="Talk to Cutoff"><canvas id="orb"></canvas></button>
+  <div class="dtext">
+    <div id="dstate">Tap the orb and talk to Cutoff</div>
+    <div id="vcaption">Try: “what needs me first?”</div>
+    <div id="dchips"></div>
+  </div>
+  <button id="dmin" class="dmin" aria-label="Minimize to the left" title="Minimize"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <div class="dbtns"><button id="dspeed" class="dspeed" title="Speech speed" aria-label="Speech speed">1×</button><button id="dmic" class="dmic" aria-label="Start talking"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button id="dend" class="dend" hidden aria-label="End">End</button></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

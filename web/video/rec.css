@@ -1,0 +1,64 @@
+/* Shared stage + recorder UI for the Cutoff videos. The 1920x1080 #stage is what gets recorded. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap");
+
+:root {
+  --bg: #0b1226; --bg-2: #111a38; --card: #16204a; --line: #24363e;
+  --text: #eef3f2; --muted: #93a6ab; --accent: #ff8a4c; --accent-2: #e8590c;
+  --applies: #4ade80; --unknown: #fbbf24; --superseded: #a5afc0; --nye: #93b4ff;
+  --pending: #c4a5ff; --conflict: #fb923c; --bad: #fb7185;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body { font-family: Inter, system-ui, sans-serif; color: var(--text); }
+
+#stage {
+  position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px;
+  transform-origin: 50% 50%; overflow: hidden; background: var(--bg);
+}
+.scene { position: absolute; inset: 0; }
+
+/* Burned-in captions */
+#captions {
+  position: absolute; left: 110px; right: 110px; bottom: 36px;
+  z-index: 50; pointer-events: none; text-align: center;
+}
+#captions span {
+  display: inline; padding: 10px 22px; line-height: 1.7; font-size: 36px; font-weight: 650;
+  background: rgba(5, 10, 12, .82); color: #fff; border-radius: 12px;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+#captions em { font-style: normal; color: #ffb27a; }
+body.no-captions #captions { display: none; }
+
+
+/* Countdown overlay (not recorded: recording starts after it disappears) */
+#countdown {
+  position: absolute; inset: 0; z-index: 100; display: none; place-items: center;
+  background: rgba(0, 0, 0, .78); font-size: 260px; font-weight: 800; color: var(--accent);
+}
+
+/* Control panel: lives outside the stage, hidden while recording */
+#ctl {
+  position: fixed; top: 12px; left: 12px; z-index: 1000; width: 380px; max-height: calc(100vh - 24px); overflow: auto;
+  background: rgba(16, 22, 25, .96); color: #e8eef0; border: 1px solid #2c3b42; border-radius: 14px;
+  padding: 14px 16px; font: 14px/1.45 Inter, system-ui, sans-serif; box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+}
+#ctl h1 { font-size: 16px; margin: 0 0 4px; }
+#ctl p { margin: 6px 0; color: #a9b7bc; }
+#ctl .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+#ctl button {
+  font: 600 14px Inter, system-ui, sans-serif; padding: 8px 12px; border-radius: 9px; cursor: pointer;
+  border: 1px solid #36505a; background: #1c2b31; color: #e8eef0;
+}
+#ctl button.primary { background: #e8590c; border-color: #ff7a2f; }
+#ctl button:disabled { opacity: .5; cursor: default; }
+#ctl label { display: flex; gap: 8px; align-items: center; margin: 4px 0; cursor: pointer; }
+#ctl input[type=range] { width: 100%; }
+#ctl .status { font-family: var(--mono); font-size: 12.5px; color: #ffb27a; white-space: pre-wrap; }
+#ctl video { width: 100%; border-radius: 8px; margin-top: 8px; background: #000; }
+#ctl a { color: #ffb27a; }
+#ctl .min { position: absolute; top: 8px; right: 10px; padding: 2px 8px; }
+#ctl.collapsed > :not(.min):not(h1) { display: none; }
+body.recording #ctl { display: none; }
+body.recording { cursor: none; }

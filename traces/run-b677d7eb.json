@@ -1,0 +1,41 @@
+{
+ "id": "run-b677d7eb",
+ "order_id": "ord-00299",
+ "mode": "live",
+ "model": "openai-compatible:openai/gpt-oss-120b",
+ "status": "error",
+ "now": "2026-10-21T09:00:00Z",
+ "calls": 0,
+ "max_calls": 8,
+ "steps": [
+  {
+   "kind": "NOTE",
+   "text": "Model reply was not JSON; asked again.",
+   "n": 1
+  },
+  {
+   "kind": "NOTE",
+   "text": "Model reply was not JSON; asked again.",
+   "n": 2
+  },
+  {
+   "kind": "NOTE",
+   "text": "Model reply was not JSON; asked again.",
+   "n": 3
+  },
+  {
+   "kind": "STOP",
+   "text": "Model unavailable: RuntimeError: 400 from the model endpoint: {\"error\":{\"message\":\"Tool choice is none, but model called a tool\",\"type\":\"invalid_request_error\",\"code\":\"tool_use_failed\",\"failed_generation\":\"{\\\"name\\\": \\\"repo_browser.open_file\\\", \\\"arguments\\\": {\\\"path\\\": \\\"\\\", \\\"line_start\\\": 1, \\\"line_end\\\": 20}}\"}}\n",
+   "n": 4
+  }
+ ],
+ "final": null,
+ "grounding": null,
+ "stop_reason": null,
+ "error": "RuntimeError: 400 from the model endpoint: {\"error\":{\"message\":\"Tool choice is none, but model called a tool\",\"type\":\"invalid_request_error\",\"code\":\"tool_use_failed\",\"failed_generation\":\"{\\\"name\\\": \\\"repo_browser.open_file\\\", \\\"arguments\\\": {\\\"path\\\": \\\"\\\", \\\"line_start\\\": 1, \\\"line_end\\\": 20}}\"}}\n",
+ "model_outputs": [
+  "",
+  "",
+  ""
+ ]
+}

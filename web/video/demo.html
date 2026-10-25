@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cutoff demo video</title>
+<link rel="stylesheet" href="rec.css?v=1">
+<style>
+  #stage { background: radial-gradient(1000px 760px at 0% 0%, #1b2c66 0%, transparent 62%), radial-gradient(900px 700px at 100% 100%, #4a1d0a 0%, transparent 60%), #070b18; }
+  .win { position: absolute; left: 680px; top: 70px; width: 1160px; height: 820px; border-radius: 20px; overflow: hidden; background: #fff; box-shadow: 0 30px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07); }
+  .chrome { height: 46px; background: #0d1224; display: flex; align-items: center; gap: 9px; padding: 0 18px; position: relative; z-index: 3; }
+  .chrome i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+  .chrome .url { position: absolute; left: 50%; transform: translateX(-50%); background: #1a2140; color: #dfe6ff; font: 500 16px var(--mono); padding: 6px 24px; border-radius: 20px; }
+  .chrome .url::before { content: "● "; color: #ff8a4c; }
+  .chrome .live { margin-left: auto; font: 700 13px var(--mono); color: #ffb27a; letter-spacing: 1.5px; }
+  .view { position: absolute; left: 0; top: 46px; width: 1160px; height: 774px; overflow: hidden; background: #fff; }
+  #cam { position: absolute; left: 0; top: 0; width: 1160px; height: 774px; transform-origin: 0 0; }
+  #frame { position: absolute; left: 0; top: 0; width: 1160px; height: 774px; border: 0; background: #f5f6f8; display: block; }
+  .focus { position: absolute; left: 0; top: 0; z-index: 4; border: 3px solid #ff7a2f; border-radius: 14px; opacity: 0; pointer-events: none; box-shadow: 0 0 0 6px rgba(255,122,47,.2); }
+  #cursor { position: absolute; left: 0; top: 0; z-index: 5; width: 34px; height: 34px; opacity: 0; pointer-events: none; }
+  #ripple { position: absolute; z-index: 5; left: 0; top: 0; width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%; border: 4px solid #ff7a2f; opacity: 0; pointer-events: none; }
+  .beat { position: absolute; left: 96px; top: 210px; width: 540px; opacity: 0; }
+  .beat .num { font: 700 26px var(--mono); color: var(--accent); letter-spacing: 3px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px; }
+  .beat .num::after { content: ""; height: 2px; width: 70px; background: var(--accent); opacity: .6; }
+  .beat .hd { font-size: 66px; font-weight: 800; letter-spacing: -2.4px; line-height: 1.04; }
+  .beat .hd em { font-style: normal; color: var(--accent); }
+  .beat .sub { font-size: 28px; line-height: 1.4; color: var(--muted); margin-top: 26px; font-weight: 500; }
+  .ln { display: block; overflow: hidden; padding-bottom: .06em; }
+  .ln > span { display: inline-block; }
+  .tc { position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; text-align: center; opacity: 0; pointer-events: none;
+        background: radial-gradient(1100px 700px at 25% 15%, #1b2c66 0%, transparent 62%), radial-gradient(900px 600px at 90% 95%, #4a1d0a 0%, transparent 60%), #070b18; }
+  .tc .k { font: 700 24px var(--mono); color: var(--accent); letter-spacing: 6px; margin-bottom: 30px; }
+  .tc .l { font-size: 96px; font-weight: 800; letter-spacing: -3px; line-height: 1.05; }
+  .tc .l.acc { color: var(--accent); }
+  .tc .stats { display: flex; gap: 60px; justify-content: center; margin-top: 54px; font-size: 24px; color: var(--muted); }
+  .tc .stats b { display: block; font-size: 64px; color: #fff; letter-spacing: -2px; }
+  .tc .url { margin-top: 40px; font: 600 28px var(--mono); color: var(--accent); }
+  .tc .list { margin-top: 44px; text-align: left; display: inline-block; font-size: 38px; line-height: 1.6; color: #e6ecff; font-weight: 600; }
+  .tc .list li { margin: 6px 0; }
+  .tc .list li::marker { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="win" id="win">
+    <div class="chrome"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:8750 · Cutoff</span><span class="live">LIVE PRODUCT</span></div>
+    <div class="view"><div id="cam">
+      <iframe id="frame" title="Cutoff live"></iframe>
+      <div class="focus" id="focus"></div>
+      <div id="ripple"></div>
+      <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 11-6.5 1.2L16 21l-3 1.4-3.4-6.9L4 20z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </div></div>
+  </div>
+
+  <div class="beat" id="b1"><div class="num">01</div><div class="hd"><span class="ln"><span>Sorted by how</span></span><span class="ln"><span><em>real</em> the deadline</span></span><span class="ln"><span>is.</span></span></div><div class="sub fade">22 orders need a person. Only two are really against the clock.</div></div>
+  <div class="beat" id="b2"><div class="num">02</div><div class="hd"><span class="ln"><span>A reminder is</span></span><span class="ln"><span><em>not</em> a deadline.</span></span></div><div class="sub fade">Ferry check-ins are real. To-do dates are soft, so they never jump the queue.</div></div>
+  <div class="beat" id="b3"><div class="num">03</div><div class="hd"><span class="ln"><span>An agent that</span></span><span class="ln"><span>says <em>"I can't</em></span></span><span class="ln"><span><em>tell."</em></span></span></div><div class="sub fade">It looks things up, cites every fact, and stops instead of guessing.</div></div>
+  <div class="beat" id="b4"><div class="num">04</div><div class="hd"><span class="ln"><span>It never books</span></span><span class="ln"><span><em>without you.</em></span></span></div><div class="sub fade">Every step waits for your yes, with a plan if one fails.</div></div>
+  <div class="beat" id="b5"><div class="num">05</div><div class="hd"><span class="ln"><span>Just <em>talk</em></span></span><span class="ln"><span>to it.</span></span></div><div class="sub fade">Hands-free briefing. It minimizes out of the way.</div></div>
+  <div class="beat" id="b6"><div class="num">06</div><div class="hd"><span class="ln"><span>Proof, even</span></span><span class="ln"><span>where it <em>loses.</em></span></span></div><div class="sub fade">Method written down before the run.</div></div>
+
+  <div class="tc" id="tA"><div>
+    <div class="k fade">CUTOFF · CAR DELIVERY CONTROL ROOM</div>
+    <div class="l"><span class="ln"><span>Only what needs a person.</span></span></div>
+    <div class="l acc"><span class="ln"><span>Ranked by how real the deadline is.</span></span></div>
+  </div></div>
+  <div class="tc" id="tB"><div>
+    <div class="k fade">HOW IT WAS BUILT · CLAUDE CODE + SUBAGENTS</div>
+    <div class="l" style="font-size:72px"><span class="ln"><span>How it was built</span></span></div>
+    <ul class="list fade">
+      <li>A critic agent argued the idea for four rounds</li>
+      <li>Reading the real data killed one whole idea</li>
+      <li>Checks caught three bugs. Each is now a test</li>
+      <li>Recorded runs come from a real model</li>
+    </ul>
+  </div></div>
+  <div class="tc" id="tZ"><div>
+    <div class="l" style="font-size:88px"><span class="ln"><span>Honest about what it knows.</span></span></div>
+    <div class="l acc" style="font-size:88px"><span class="ln"><span>You make the call.</span></span></div>
+    <div class="stats fade"><div><b>11/11</b>claims grounded</div><div><b>25</b>tests pass</div><div><b>3</b>real agent runs</div></div>
+    <div class="url fade">Cutoff · Bahn control room</div>
+  </div></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mp4-muxer@5.2.1/build/mp4-muxer.min.js"></script>
+<script src="rec.js?v=1"></script>
+<script>
+  const frame = document.getElementById("frame");
+  const Z = 1, VW = 1160, VH = 774;
+  const D = () => frame.contentDocument, W = () => frame.contentWindow;
+  const el = (s) => (typeof s === "function" ? s() : D().querySelector(s));
+
+  function patchFrame(w) {
+    w.Element.prototype.scrollIntoView = function () {};
+    const st = w.document.createElement("style");
+    st.textContent = "html{scrollbar-width:none;scroll-behavior:auto!important}html::-webkit-scrollbar{display:none}*{transition:none!important}#dock{bottom:.7rem}";
+    w.document.head.appendChild(st);
+  }
+  function loadFrame() {
+    return new Promise((resolve) => {
+      frame.onload = async () => {
+        for (let i = 0; i < 150; i++) {
+          let ready = false; try { ready = W().eval("!!(S.q && S.glance && S.eval && S.info)"); } catch (e) {}
+          if (ready) break; await new Promise((r) => setTimeout(r, 100));
+        }
+        patchFrame(W()); W().scrollTo(0, 0); resolve();
+      };
+      frame.src = "../index.html?video=1&t=" + Date.now();
+    });
+  }
+  async function prepare() {
+    try { localStorage.setItem("cutoff.prefs", JSON.stringify({ theme: "dark", size: "m", density: "comfortable", images: "on", motion: "full", voice: "off", engine: "browser", rate: "1.03", voiceName: "", dockMin: false })); } catch (e) {}
+    await loadFrame();
+  }
+
+  const box = (s) => { const e = el(s); if (!e) return { x: 580, y: 410, w: 10, h: 10 }; const b = e.getBoundingClientRect(); return { x: b.left * Z, y: b.top * Z, w: b.width * Z, h: b.height * Z }; };
+  const headH = () => 64;
+  const topOf = (s, pad) => { const e = el(s); return e ? Math.max(0, W().scrollY + e.getBoundingClientRect().top - headH() - pad) : W().scrollY; };
+  function jump(tl, target, at, pad = 16) { tl.call(() => W().scrollTo(0, typeof target === "number" ? target : topOf(target, pad)), null, at); }
+  const clampX = (x, s) => Math.min(0, Math.max(VW - VW * s, x)), clampY = (y, s) => Math.min(0, Math.max(VH - VH * s, y));
+  function zoom(tl, s, scale, at, dur = .8) {
+    tl.to("#cam", { x: () => { const b = box(s); return clampX(VW / 2 - (b.x + b.w / 2) * scale, scale); }, y: () => { const b = box(s); return clampY(VH / 2 - (b.y + b.h / 2) * scale, scale); }, scale, duration: dur, ease: "power2.inOut" }, at);
+  }
+  const unzoom = (tl, at, dur = .6) => tl.to("#cam", { x: 0, y: 0, scale: 1, duration: dur, ease: "power2.inOut" }, at);
+  function focus(tl, s, at, hold = 2, pad = 6) {
+    tl.set("#focus", { x: () => box(s).x - pad, y: () => box(s).y - pad, width: () => box(s).w + 2 * pad, height: () => box(s).h + 2 * pad }, at);
+    tl.fromTo("#focus", { opacity: 0, scale: 1.04 }, { opacity: 1, scale: 1, duration: .3, ease: "power2.out", immediateRender: false }, at);
+    tl.to("#focus", { opacity: 0, duration: .25 }, at + hold);
+  }
+  function move(tl, s, at, dur = .55, fx = .5) { tl.to("#cursor", { opacity: 1, x: () => box(s).x + box(s).w * fx, y: () => box(s).y + box(s).h * .55, duration: dur, ease: "power2.inOut" }, at); }
+  function tap(tl, at, fn) {
+    tl.set("#ripple", { x: () => gsap.getProperty("#cursor", "x") + 4, y: () => gsap.getProperty("#cursor", "y") + 4 }, at);
+    tl.fromTo("#ripple", { scale: .3, opacity: 1 }, { scale: 1.3, opacity: 0, duration: .5, ease: "power2.out", immediateRender: false }, at);
+    tl.call(fn, null, at + .02);
+  }
+  const hideCursor = (tl, at) => tl.to("#cursor", { opacity: 0, duration: .2 }, at);
+  function cut(tl, at, fn) {
+    tl.to(".view", { opacity: 0, duration: .16, ease: "power1.in" }, at);
+    tl.call(fn, null, at + .17);
+    tl.set("#cam", { x: 0, y: 0, scale: 1 }, at + .18);
+    tl.set("#focus", { opacity: 0 }, at + .18);
+    tl.to(".view", { opacity: 1, duration: .22, ease: "power1.out" }, at + .3);
+  }
+  function beatIn(tl, id, at) {
+    tl.set(`#${id}`, { opacity: 1 }, at);
+    tl.fromTo(`#${id} .num`, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: .4, ease: "power3.out", immediateRender: false }, at);
+    tl.fromTo(`#${id} .ln > span`, { yPercent: 110 }, { yPercent: 0, duration: .55, stagger: .09, ease: "power4.out", immediateRender: false }, at + .05);
+    tl.fromTo(`#${id} .fade`, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .45, stagger: .25, ease: "power2.out", immediateRender: false }, at + .45);
+  }
+  function beatOut(tl, id, at) { tl.to(`#${id}`, { opacity: 0, y: -16, duration: .25, ease: "power1.in" }, at); tl.set(`#${id}`, { y: 0 }, at + .3); }
+  function card(tl, id, at, hold) {
+    tl.fromTo(`#${id}`, { opacity: 0 }, { opacity: 1, duration: at > 0 ? .5 : .01, ease: "power2.inOut", immediateRender: false }, at);
+    const lead = at > 0 ? .35 : .05;
+    tl.set(`#${id} .ln > span`, { yPercent: 110 }, 0);
+    tl.fromTo(`#${id} .ln > span`, { yPercent: 110 }, { yPercent: 0, duration: .65, stagger: .14, ease: "power4.out", immediateRender: false }, at + lead);
+    tl.fromTo(`#${id} .fade`, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .45, stagger: .12, ease: "power2.out", immediateRender: false }, at + lead + .15);
+    if (hold) tl.to(`#${id}`, { opacity: 0, duration: .35 }, at + hold);
+  }
+  const act = (f) => () => { try { f(W()); } catch (e) { console.warn("demo step failed", e); } };
+
+  Rec.init({
+    title: "Demo video · 92 s",
+    slug: "demo",
+    scrub: false,
+    poster: 8.0,
+    duration: 92,
+    voice: "Andrew",
+    help: "Self-playing tour of the live Cutoff app (served from the local server, which must be running). Pass 1 records the neural voice, pass 2 renders the picture frame by frame.",
+    prepare,
+    cues: [
+      { t: 0.4, say: "Cutoff. A control room for Bahn that shows *only the orders that need a person*, ranked by how *real* the deadline is." },
+      { t: 6.6, say: "Most boards sort by severity. Cutoff sorts by *how real the deadline is*. Twenty-two orders need a person, and only *two* are really against the clock." },
+      { t: 15.4, say: "A booked ferry's check-in is real. A to-do reminder is *not*, so it never jumps the queue. And if the data states no deadline, it *says so*." },
+      { t: 24.8, say: "Click a group to filter. Here are the two ferries. Open the Volkswagen: check-in closes in *three hours*." },
+      { t: 33.0, say: "Ask the agent. It looks things up and cites every fact. And when the data can't tell whether the driver makes it, it *says so*, instead of guessing." },
+      { t: 46.0, say: "It can't book, cancel, or contact a customer. Every step *waits for your yes*, reversible steps first, with a plan if one fails." },
+      { t: 55.5, say: "And you can just *talk* to it. Ask what needs you first, say next, or why did you stop. It briefs you like a person, and it *minimizes* out of the way." },
+      { t: 68.0, say: "We tested whether the ordering helps, with the method *written down first*. It beats a severity board, loses to a plain soonest-deadline sort when people are slow, and *says so*." },
+      { t: 78.5, say: "Built with Claude Code. A critic agent argued the idea for four rounds, reading the real data killed one idea, and checks caught three bugs." },
+      { t: 86.0, say: "Cutoff. *Honest* about what it knows. *You* make the call." },
+    ],
+    build(tl) {
+      tl.set("#cam", { x: 0, y: 0, scale: 1 }, 0).set("#win", { opacity: 0 }, 0).set(".tc,.beat,#focus,#ripple", { opacity: 0 }, 0).set("#cursor", { opacity: 0, x: 900, y: 600 }, 0);
+
+      // open
+      card(tl, "tA", 0, 6.2);
+      tl.call(act((w) => { w.scrollTo(0, 0); }), null, 0.2);
+
+      // 01: sorted by how real
+      beatIn(tl, "b1", 6.4);
+      tl.fromTo("#win", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: .5, ease: "power3.out", immediateRender: false }, 6.4);
+      zoom(tl, ".hgrid", 1.0, 7.0, .5);
+      focus(tl, ".topcard .count", 9.0, 2.2, 8);
+      focus(tl, "#hero .hero-h", 12.2, 2.4, 6);
+      beatOut(tl, "b1", 15.0);
+
+      // 02: graded deadlines
+      beatIn(tl, "b2", 15.2);
+      cut(tl, 15.1, () => W().scrollTo(0, topOf("#diff", 10)));
+      focus(tl, "#diff .dcard:first-child .legend", 17.6, 3.0, 8);
+      focus(tl, "#diff .dcard:first-child h3", 21.0, 2.6, 6);
+      beatOut(tl, "b2", 24.4);
+
+      // 03: filter, open order, agent
+      beatIn(tl, "b3", 24.6);
+      cut(tl, 24.5, () => W().scrollTo(0, topOf("#work", 6)));
+      move(tl, "#summary .tab[data-tab=CUTOFF]", 25.9, .6);
+      tap(tl, 26.6, act((w) => { w.document.querySelector('#summary .tab[data-tab="CUTOFF"]').click(); }));
+      hideCursor(tl, 27.0);
+      tl.call(act((w) => w.openOrder("ord-00603")), null, 29.0);
+      tl.call(act((w) => w.scrollTo(0, topOf("#detail", 6))), null, 29.9);
+      focus(tl, "#detail .hero2 .count", 30.6, 2.0, 8);
+      tl.call(act((w) => w.startRun("recorded")), null, 33.4);
+      tl.call(act((w) => w.scrollTo(0, topOf("#detail .zone.decide", 6))), null, 35.4);
+      focus(tl, "#detail .zone.decide .warnbox", 38.5, 4.5, 8);
+      focus(tl, "#detail .zone.decide h3[style]", 44.0, 1.5, 8);
+      beatOut(tl, "b3", 45.6);
+
+      // 04: never books without you
+      beatIn(tl, "b4", 45.8);
+      tl.call(act((w) => { const o = w.document.querySelector("#detail .opt"); if (o) w.scrollTo(0, w.scrollY + o.getBoundingClientRect().top - 90); }), null, 46.4);
+      focus(tl, "#detail .opt", 48.6, 3.2, 8);
+      beatOut(tl, "b4", 55.0);
+
+      // 05: talk to it
+      beatIn(tl, "b5", 55.2);
+      cut(tl, 55.1, () => { W().scrollTo(0, topOf("#work", 6)); W().dockOn(true); W().setMode("speaking", "Speaking"); W().caption("Twenty-two orders need a person, but only two are really against the clock, and both are ferries."); });
+      zoom(tl, "#dock", 1.3, 56.0, .8);
+      tl.call(act((w) => { w.setMode("listening", "Listening"); w.caption("“What needs me first?”"); }), null, 61.0);
+      tl.call(act((w) => { w.setMode("speaking", "Speaking"); w.caption("The Volkswagen Golf. Ferry check-in closes in three hours. Want me to open it?"); }), null, 62.6);
+      unzoom(tl, 64.6, .5);
+      tl.call(act((w) => { w.dockOn(false); w.setMin(true); }), null, 65.4);
+      beatOut(tl, "b5", 67.2);
+
+      // 06: proof
+      beatIn(tl, "b6", 67.6);
+      cut(tl, 67.5, () => { W().setMin(true); W().scrollTo(0, topOf("#proof", 6)); });
+      focus(tl, "#proofbody .bigtable", 70.0, 5.0, 8);
+      focus(tl, "#proofbody .bigtable tr:last-child", 75.4, 2.2, 6);
+      beatOut(tl, "b6", 77.6);
+
+      // how it was built, then the close
+      card(tl, "tB", 78.0, 7.2);
+      card(tl, "tZ", 85.6, 0);
+    },
+  });
+</script>
+</body>
+</html>

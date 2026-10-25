@@ -1,0 +1,86 @@
+{
+ "snapshot": "2026-10-21T09:00:00Z",
+ "table": [
+  {
+   "latency_min": 2,
+   "severity": 0,
+   "tier_first": 0,
+   "soonest": 0
+  },
+  {
+   "latency_min": 5,
+   "severity": 0,
+   "tier_first": 0,
+   "soonest": 0
+  },
+  {
+   "latency_min": 10,
+   "severity": 0,
+   "tier_first": 0,
+   "soonest": 0
+  },
+  {
+   "latency_min": 20,
+   "severity": 3,
+   "tier_first": 0,
+   "soonest": 0
+  },
+  {
+   "latency_min": 30,
+   "severity": 5,
+   "tier_first": 0,
+   "soonest": 0
+  },
+  {
+   "latency_min": 60,
+   "severity": 5,
+   "tier_first": 3,
+   "soonest": 1
+  },
+  {
+   "latency_min": 120,
+   "severity": 8,
+   "tier_first": 5,
+   "soonest": 4
+  }
+ ],
+ "scored": 18,
+ "queue": 22,
+ "hidden": 55,
+ "ledger_audit_flagged": [
+  {
+   "order": "ord-00735",
+   "why": [
+    "in transit with no tracking at all"
+   ]
+  },
+  {
+   "order": "ord-00806",
+   "why": [
+    "tracking stale > 3h"
+   ]
+  },
+  {
+   "order": "ord-01013",
+   "why": [
+    "in transit with no tracking at all"
+   ]
+  }
+ ],
+ "sample": [
+  "ord-00118",
+  "ord-00123",
+  "ord-00222",
+  "ord-00311",
+  "ord-00452",
+  "ord-00576",
+  "ord-00579",
+  "ord-00697",
+  "ord-00735",
+  "ord-01010"
+ ],
+ "secondary": {
+  "label": 22,
+  "overlap": 21
+ }
+}
